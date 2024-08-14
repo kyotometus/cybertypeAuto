@@ -1,22 +1,27 @@
 const wordList = document.querySelectorAll('[class^="Words_word_"]');
-const letters = wordList[0].querySelectorAll('[class^="Words_character_"]');
+const wordsArray = Array.from(wordList);
 
-const filteredLetters = Array.from(letters).filter(
-  span => !span.className.endsWith('undefined')
-);
+let letters = [];
 
-const undefinedLetters = Array.from(letters).filter(
-  span => span.className.endsWith('undefined')
-);
+wordsArray.forEach(wordDiv => {
+    const spans = wordDiv.querySelectorAll('[class^="Words_character_"]');
+    letters = letters.concat(Array.from(spans));
+});
 
-for (let i = 0; i < filteredLetters.length; i++) {
+
+for (let i = 0; i < letters.length; i++) {
+
+    if (letters[i].textContent === '') {
+      letters[i].textContent = " ";
+    }
+
     const event = new KeyboardEvent('keydown', {
-        key: filteredLetters[i].textContent,
+        key: letters[i].textContent,
         bubbles: true,
         cancelable: true
     });
 
     document.dispatchEvent(event);
 
-    console.log(`Dispatched key: ${filteredLetters[i].textContent}`);
+    console.log(`Dispatched key: ${letters[i].textContent}`);
 }
